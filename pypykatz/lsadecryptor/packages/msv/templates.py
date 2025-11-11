@@ -63,12 +63,11 @@ class MsvTemplate(PackageTemplate):
 		elif sysinfo.buildnumber < WindowsBuild.WIN_11_24H2.value:
 			template.list_entry = PKIWI_MSV1_0_LIST_63
 		
+		elif sysinfo.buildnumber < WindowsBuild.WIN_11_25H2.value:
+			template.list_entry = PKIWI_MSV1_0_LIST_64
+
 		else:
-			#input(sysinfo.msv_dll_timestamp)
-			if sysinfo.msv_dll_timestamp == 28698614: #experimental
-				template.list_entry = PKIWI_MSV1_0_LIST_65
-			else:
-				template.list_entry = PKIWI_MSV1_0_LIST_64
+			template.list_entry = PKIWI_MSV1_0_LIST_65
 
 		template.log_template('list_entry', template.list_entry)
 		if sysinfo.buildnumber < WindowsBuild.WIN_10_1507.value:
@@ -679,47 +678,39 @@ class KIWI_MSV1_0_LIST_64:
 		self.unk11 = ULONG(reader).value
 		self.unk12 = ULONG(reader).value
 		self.unk13 = PVOID(reader).value
-		
+		reader.align()
 		self.LocallyUniqueIdentifier = LUID(reader).value
 		self.SecondaryLocallyUniqueIdentifier = LUID(reader).value
 		self.waza = reader.read(12)
 		reader.align()
-		self.unkXX = PVOID(reader).value # yaaaay! something new!!!
-		#reader.read(8)
+		self.unk14 = PVOID(reader).value
 		self.UserName = LSA_UNICODE_STRING(reader)
 		self.Domaine = LSA_UNICODE_STRING(reader)
-		self.unk14 = PVOID(reader).value
 		self.unk15 = PVOID(reader).value
-		
+		self.unk16 = PVOID(reader).value
 		self.Type = LSA_UNICODE_STRING(reader)
 		self.pSid = PSID(reader)
 		self.LogonType = ULONG(reader).value
 		reader.align()
-		self.unk18 = PVOID(reader).value
+		self.unk17 = PVOID(reader).value
 		self.Session = ULONG(reader).value
 		reader.align(8)
-		
 		self.LogonTime =  int.from_bytes(reader.read(8), byteorder = 'little', signed = False) #autoalign x86
 		self.LogonServer = LSA_UNICODE_STRING(reader)
 		self.Credentials_list_ptr = PKIWI_MSV1_0_CREDENTIAL_LIST(reader)
+		self.unk18 = PVOID(reader).value
 		self.unk19 = PVOID(reader).value
 		self.unk20 = PVOID(reader).value
-		self.unk21 = PVOID(reader).value
+		self.unk21 = ULONG(reader).value
 		self.unk22 = ULONG(reader).value
 		self.unk23 = ULONG(reader).value
 		self.unk24 = ULONG(reader).value
 		self.unk25 = ULONG(reader).value
-		self.unk26 = ULONG(reader).value
 		reader.align()
+		self.unk26 = PVOID(reader).value
 		self.unk27 = PVOID(reader).value
 		self.unk28 = PVOID(reader).value
-		self.unk29 = PVOID(reader).value
-		
 		self.CredentialManager = PVOID(reader)
-
-		#reader.read(96)
-		#self.CredentialManager = PVOID(reader)
-
 
 class PKIWI_MSV1_0_LIST_65(POINTER):
 	def __init__(self, reader):
@@ -745,19 +736,17 @@ class KIWI_MSV1_0_LIST_65:
 		self.unk11 = ULONG(reader).value
 		self.unk12 = ULONG(reader).value
 		self.unk13 = PVOID(reader).value
-		
+		reader.align()
 		self.LocallyUniqueIdentifier = LUID(reader).value
 		self.SecondaryLocallyUniqueIdentifier = LUID(reader).value
 		self.waza = reader.read(12)
 		reader.align()
-		self.unkXX = PVOID(reader).value # yaaaay! something new!!!
-		self.unkXX2 = PVOID(reader).value #reader.read(8)
-		
-		self.UserName = LSA_UNICODE_STRING(reader)
-		self.Domaine = LSA_UNICODE_STRING(reader)
 		self.unk14 = PVOID(reader).value
 		self.unk15 = PVOID(reader).value
-		
+		self.UserName = LSA_UNICODE_STRING(reader)
+		self.Domaine = LSA_UNICODE_STRING(reader)
+		self.unk16 = PVOID(reader).value
+		self.unk17 = PVOID(reader).value
 		self.Type = LSA_UNICODE_STRING(reader)
 		self.pSid = PSID(reader)
 		self.LogonType = ULONG(reader).value
@@ -765,7 +754,6 @@ class KIWI_MSV1_0_LIST_65:
 		self.unk18 = PVOID(reader).value
 		self.Session = ULONG(reader).value
 		reader.align(8)
-		
 		self.LogonTime =  int.from_bytes(reader.read(8), byteorder = 'little', signed = False) #autoalign x86
 		self.LogonServer = LSA_UNICODE_STRING(reader)
 		self.Credentials_list_ptr = PKIWI_MSV1_0_CREDENTIAL_LIST(reader)
@@ -781,11 +769,7 @@ class KIWI_MSV1_0_LIST_65:
 		self.unk27 = PVOID(reader).value
 		self.unk28 = PVOID(reader).value
 		self.unk29 = PVOID(reader).value
-		
 		self.CredentialManager = PVOID(reader)
-
-		#reader.read(96)
-		#self.CredentialManager = PVOID(reader)
 
 
 
