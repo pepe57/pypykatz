@@ -79,10 +79,10 @@ def roast_ccache(ccachefile, outfile = None):
 	cc = CCACHE.from_file(ccachefile)
 	if outfile:
 		with open(outfile, 'wb') as f:
-			for h in cc.get_hashes(all_hashes = True):
+			for h in cc.get_hashes():
 				f.write(h.encode() + b'\r\n')
 	else:
-		for h in cc.get_hashes(all_hashes = True):
+		for h in cc.get_hashes():
 			print(h)
 
 def del_ccache(ccachefile, index):
