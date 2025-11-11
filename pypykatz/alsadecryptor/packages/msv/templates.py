@@ -64,12 +64,11 @@ class MsvTemplate(PackageTemplate):
 		elif sysinfo.buildnumber < WindowsBuild.WIN_11_24H2.value:
 			template.list_entry = PKIWI_MSV1_0_LIST_63
 		
+		elif sysinfo.buildnumber < WindowsBuild.WIN_11_25H2.value:
+			template.list_entry = PKIWI_MSV1_0_LIST_64
+
 		else:
-			#input(sysinfo.msv_dll_timestamp)
-			if sysinfo.msv_dll_timestamp == 28698614: #experimental
-				template.list_entry = PKIWI_MSV1_0_LIST_65
-			else:
-				template.list_entry = PKIWI_MSV1_0_LIST_64
+			template.list_entry = PKIWI_MSV1_0_LIST_65
 		
 		template.log_template('list_entry', template.list_entry)
 		if sysinfo.buildnumber < WindowsBuild.WIN_10_1507.value:
@@ -1164,19 +1163,20 @@ class KIWI_MSV1_0_LIST_64:
 		self.LocallyUniqueIdentifier = None
 		self.SecondaryLocallyUniqueIdentifier = None
 		self.waza = None
-		self.unkXX = None
+		self.unk14 = None
 		self.UserName = None
 		self.Domaine = None
-		self.unk14 = None
 		self.unk15 = None
+		self.unk16 = None
 		self.Type = None
 		self.pSid = None
 		self.LogonType = None
-		self.unk18 = None
+		self.unk17 = None
 		self.Session = None
 		self.LogonTime =  None
 		self.LogonServer = None
 		self.Credentials_list_ptr = None
+		self.unk18 = None
 		self.unk19 = None
 		self.unk20 = None
 		self.unk21 = None
@@ -1187,7 +1187,6 @@ class KIWI_MSV1_0_LIST_64:
 		self.unk26 = None
 		self.unk27 = None
 		self.unk28 = None
-		self.unk29 = None
 		self.CredentialManager = None
 
 	@staticmethod
@@ -1217,35 +1216,35 @@ class KIWI_MSV1_0_LIST_64:
 		res.SecondaryLocallyUniqueIdentifier = await LUID.loadvalue(reader)
 		res.waza = await reader.read(12)
 		await reader.align()
-		res.unkXX = await PVOID.loadvalue(reader)
+		res.unk14 = await PVOID.loadvalue(reader)
 
 		res.UserName = await LSA_UNICODE_STRING.load(reader)
 		res.Domaine = await LSA_UNICODE_STRING.load(reader)
-		res.unk14 = await PVOID.loadvalue(reader)
 		res.unk15 = await PVOID.loadvalue(reader)
+		res.unk16 = await PVOID.loadvalue(reader)
 		res.Type = await LSA_UNICODE_STRING.load(reader)
 		res.pSid = await PSID.load(reader)
 		res.LogonType = await ULONG.loadvalue(reader)
 		await reader.align()
-		res.unk18 = await PVOID.loadvalue(reader)
+		res.unk17 = await PVOID.loadvalue(reader)
 		res.Session = await ULONG.loadvalue(reader)
 		await reader.align(8)
 		t = await reader.read(8)
 		res.LogonTime =  int.from_bytes(t, byteorder = 'little', signed = False) #autoalign x86
 		res.LogonServer = await LSA_UNICODE_STRING.load(reader)
 		res.Credentials_list_ptr = await PKIWI_MSV1_0_CREDENTIAL_LIST.load(reader)
+		res.unk18 = await PVOID.loadvalue(reader)
 		res.unk19 = await PVOID.loadvalue(reader)
 		res.unk20 = await PVOID.loadvalue(reader)
-		res.unk21 = await PVOID.loadvalue(reader)
+		res.unk21 = await ULONG.loadvalue(reader)
 		res.unk22 = await ULONG.loadvalue(reader)
 		res.unk23 = await ULONG.loadvalue(reader)
 		res.unk24 = await ULONG.loadvalue(reader)
 		res.unk25 = await ULONG.loadvalue(reader)
-		res.unk26 = await ULONG.loadvalue(reader)
 		await reader.align()
+		res.unk26 = await PVOID.loadvalue(reader)
 		res.unk27 = await PVOID.loadvalue(reader)
 		res.unk28 = await PVOID.loadvalue(reader)
-		res.unk29 = await PVOID.loadvalue(reader)
 		res.CredentialManager = await PVOID.load(reader)
 		return res
 
@@ -1284,12 +1283,12 @@ class KIWI_MSV1_0_LIST_65:
 		self.LocallyUniqueIdentifier = None
 		self.SecondaryLocallyUniqueIdentifier = None
 		self.waza = None
-		self.unkXX = None
-		self.unkXX2 = None
-		self.UserName = None
-		self.Domaine = None
 		self.unk14 = None
 		self.unk15 = None
+		self.UserName = None
+		self.Domaine = None
+		self.unk16 = None
+		self.unk17 = None
 		self.Type = None
 		self.pSid = None
 		self.LogonType = None
@@ -1338,13 +1337,13 @@ class KIWI_MSV1_0_LIST_65:
 		res.SecondaryLocallyUniqueIdentifier = await LUID.loadvalue(reader)
 		res.waza = await reader.read(12)
 		await reader.align()
-		res.unkXX = await PVOID.loadvalue(reader)
-		res.unkXX2 = await PVOID.loadvalue(reader) #reader.read(8)
+		res.unk14 = await PVOID.loadvalue(reader)
+		res.unk15 = await PVOID.loadvalue(reader) #reader.read(8)
 
 		res.UserName = await LSA_UNICODE_STRING.load(reader)
 		res.Domaine = await LSA_UNICODE_STRING.load(reader)
-		res.unk14 = await PVOID.loadvalue(reader)
-		res.unk15 = await PVOID.loadvalue(reader)
+		res.unk16 = await PVOID.loadvalue(reader)
+		res.unk17 = await PVOID.loadvalue(reader)
 		res.Type = await LSA_UNICODE_STRING.load(reader)
 		res.pSid = await PSID.load(reader)
 		res.LogonType = await ULONG.loadvalue(reader)

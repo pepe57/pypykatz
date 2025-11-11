@@ -58,12 +58,12 @@ class SspDecryptor(PackageDecryptor):
 		if ssp_entry.credentials.Password.Length != 0:
 			if c.username.endswith('$') is True or c.domainname.endswith('$') is True:
 				enc_data = await ssp_entry.credentials.Password.read_maxdata(self.reader)
-				c.password, c.password_raw = self.decrypt_password(enc_data, bytes_expected=True)
+				c.password, c.password_raw = self.decrypt_password(enc_data, bytes_expected=True, segment_size=8)
 				if c.password is not None:
 					c.password = c.password.hex()
 			else:
 				enc_data = await ssp_entry.credentials.Password.read_maxdata(self.reader)
-				c.password, c.password_raw = self.decrypt_password(enc_data)
+				c.password, c.password_raw = self.decrypt_password(enc_data, segment_size=8)
 		
 		if c.username == '' and c.domainname == '' and c.password is None:
 			return

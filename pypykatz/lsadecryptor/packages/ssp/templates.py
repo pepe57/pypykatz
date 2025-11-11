@@ -34,6 +34,7 @@ class SspTemplate(PackageTemplate):
 			elif WindowsBuild.WIN_10_1507.value <= sysinfo.buildnumber < WindowsBuild.WIN_11_2022.value:
 				template.signature = b'\x24\x43\x72\x64\x41\xff\x15'
 				template.first_entry_offset = 14
+			
 			elif sysinfo.buildnumber > WindowsBuild.WIN_11_2022.value:
 				template.signature = b'\x24\x43\x72\x64\x41\x48\xff\x15'
 				template.first_entry_offset = 20
